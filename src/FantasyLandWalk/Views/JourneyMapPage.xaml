@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:FantasyLandWalk.ViewModels"
+             x:Class="FantasyLandWalk.Views.JourneyMapPage"
+             x:DataType="vm:JourneyMapViewModel"
+             Title="{Binding MapName}"
+             BackgroundColor="#1a1a2e">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- Map Placeholder -->
+            <Border StrokeShape="RoundRectangle 16"
+                    BackgroundColor="#0d3b2e"
+                    Stroke="#2d6a4f"
+                    StrokeThickness="1"
+                    HeightRequest="220">
+                <Grid>
+                    <BoxView Color="#0d3b2e" />
+                    <VerticalStackLayout VerticalOptions="Center"
+                                         HorizontalOptions="Center"
+                                         Spacing="8">
+                        <Label Text="🗺️"
+                               FontSize="48"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Map Coming Soon"
+                               FontSize="16"
+                               TextColor="#8b7355"
+                               FontAttributes="Italic"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="SkiaSharp rendering in progress"
+                               FontSize="11"
+                               TextColor="#555555"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Progress Card -->
+            <Border StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#16213e"
+                    Stroke="#2d6a4f"
+                    StrokeThickness="1"
+                    Padding="16">
+                <VerticalStackLayout Spacing="10">
+
+                    <!-- Current Waypoint -->
+                    <HorizontalStackLayout Spacing="6">
+                        <Label Text="📍"
+                               FontSize="16"
+                               VerticalTextAlignment="Center" />
+                        <Label Text="Current:"
+                               FontSize="14"
+                               TextColor="#8b7355"
+                               VerticalTextAlignment="Center" />
+                        <Label Text="{Binding CurrentWaypointName}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#d4a647"
+                               VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- Distance Progress -->
+                    <HorizontalStackLayout Spacing="6">
+                        <Label Text="📏"
+                               FontSize="16"
+                               VerticalTextAlignment="Center" />
+                        <HorizontalStackLayout Spacing="0"
+                                               VerticalOptions="Center">
+                            <Label Text="{Binding DistanceWalkedKm, StringFormat='{0:F1} km'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#e8d5b7" />
+                            <Label Text="{Binding TotalDistanceKm, StringFormat=' / {0:N0} km'}"
+                                   FontSize="14"
+                                   TextColor="#8b7355" />
+                            <Label Text="{Binding ProgressPercentage, StringFormat=' ({0:F0}%)'}"
+                                   FontSize="14"
+                                   TextColor="#d4a647" />
+                        </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <!-- Progress Bar -->
+                    <ProgressBar Progress="{Binding ProgressFraction}"
+                                 ProgressColor="#2d6a4f" />
+
+                    <!-- Next Waypoint -->
+                    <HorizontalStackLayout Spacing="6">
+                        <Label Text="🎯"
+                               FontSize="16"
+                               VerticalTextAlignment="Center" />
+                        <Label Text="Next:"
+                               FontSize="14"
+                               TextColor="#8b7355"
+                               VerticalTextAlignment="Center" />
+                        <Label Text="{Binding NextWaypointName}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#e8d5b7"
+                               VerticalTextAlignment="Center" />
+                        <Label Text="{Binding DistanceToNextKm, StringFormat='— {0:F0} km to go'}"
+                               FontSize="12"
+                               TextColor="#8b7355"
+                               VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Placeholder Feature Buttons -->
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="10"
+                  RowSpacing="10">
+
+                <!-- Photo Journal -->
+                <Border StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#16213e"
+                        Stroke="#333333"
+                        Padding="10"
+                        Opacity="0.5">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenPhotoJournalCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="📸 Photo Journal"
+                               TextColor="#e8d5b7"
+                               FontSize="13" />
+                        <Label Text="Coming soon"
+                               TextColor="#555555"
+                               FontSize="10"
+                               FontAttributes="Italic" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Story Log -->
+                <Border Grid.Column="1"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#16213e"
+                        Stroke="#333333"
+                        Padding="10"
+                        Opacity="0.5">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenStoryLogCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="📖 Story Log"
+                               TextColor="#e8d5b7"
+                               FontSize="13" />
+                        <Label Text="Coming soon"
+                               TextColor="#555555"
+                               FontSize="10"
+                               FontAttributes="Italic" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Soundscape -->
+                <Border Grid.Row="1"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#16213e"
+                        Stroke="#333333"
+                        Padding="10"
+                        Opacity="0.5">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenSoundscapeCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="🔊 Soundscape"
+                               TextColor="#e8d5b7"
+                               FontSize="13" />
+                        <Label Text="Coming soon"
+                               TextColor="#555555"
+                               FontSize="10"
+                               FontAttributes="Italic" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Journey Stats -->
+                <Border Grid.Row="1"
+                        Grid.Column="1"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#16213e"
+                        Stroke="#333333"
+                        Padding="10"
+                        Opacity="0.5">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenJourneyStatsCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="📈 Journey Stats"
+                               TextColor="#e8d5b7"
+                               FontSize="13" />
+                        <Label Text="Coming soon"
+                               TextColor="#555555"
+                               FontSize="10"
+                               FontAttributes="Italic" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Waypoint List -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="🧭 Waypoints"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#d4a647"
+                       Margin="0,4,0,0" />
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Waypoints}"
+                                     Spacing="6">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:WaypointDisplayModel">
+                            <Border StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#16213e"
+                                    Stroke="Transparent"
+                                    StrokeThickness="1"
+                                    Padding="12,10">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border"
+                                                 Binding="{Binding IsReached}"
+                                                 Value="False">
+                                        <Setter Property="Opacity" Value="0.5" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border"
+                                                 Binding="{Binding IsReached}"
+                                                 Value="True">
+                                        <Setter Property="Stroke" Value="#2d6a4f" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                    <Label Text="{Binding StatusIcon}"
+                                           FontSize="18"
+                                           VerticalTextAlignment="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Name}"
+                                           FontSize="14"
+                                           TextColor="#e8d5b7"
+                                           VerticalTextAlignment="Center" />
+                                    <Label Grid.Column="2"
+                                           Text="{Binding DistanceDisplay}"
+                                           FontSize="12"
+                                           TextColor="#8b7355"
+                                           VerticalTextAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

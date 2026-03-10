@@ -1,0 +1,54 @@
+name: New Map / Journey Request
+description: Propose a new fantasy map or journey for FantasyLandWalk
+title: "[Map]: "
+labels: ["new map"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for a new fantasy journey? Let us know!
+
+        > **Important:** All map names, waypoints, and landmarks must use original evocative names.
+        > Do not use real-world trademarked names (e.g. no direct references to copyrighted fictional universes).
+
+  - type: input
+    id: map-name
+    attributes:
+      label: Map Name
+      description: A creative, original name for the journey.
+      placeholder: e.g. The Ember Archipelago
+    validations:
+      required: true
+
+  - type: textarea
+    id: inspiration
+    attributes:
+      label: Inspiration / Theme
+      description: What world, genre, or aesthetic inspires this map? Describe the vibe and setting.
+      placeholder: e.g. A volcanic island chain with ancient forges and crystal caverns...
+    validations:
+      required: true
+
+  - type: textarea
+    id: waypoints
+    attributes:
+      label: Proposed Waypoints
+      description: List key landmarks or checkpoints along the journey. Use original names only.
+      placeholder: |
+        1. The Smouldering Gate (start)
+        2. Crystalvein Hollow (5 km)
+        3. The Obsidian Bridge (12 km)
+        4. Summit of Embers (finish)
+
+  - type: input
+    id: total-distance
+    attributes:
+      label: Estimated Total Distance (km)
+      description: Approximate total distance for the journey in kilometres.
+      placeholder: e.g. 25
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Reminder:** All submissions must use original, evocative names. Requests containing real-world trademarked or copyrighted names will be edited or closed.

@@ -1,0 +1,65 @@
+# .NET / MAUI
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Visual Studio / Rider
+.vs/
+*.rsuser
+*.sln.iml
+.idea/
+*.DotSettings.user
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Android
+*.apk
+*.aab
+*.dex
+*.class
+local.properties
+
+# iOS
+*.ipa
+*.dSYM.zip
+*.dSYM
+Pods/
+
+# Build results
+[Dd]ebugPublic/
+[Rr]eleases/
+[Aa]ppPackages/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+
+# Misc
+*.tmp
+*.temp
+*.log
+*.swp
+*~

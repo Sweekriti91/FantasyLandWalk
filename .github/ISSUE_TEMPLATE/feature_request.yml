@@ -1,0 +1,58 @@
+name: Feature Request
+description: Suggest a new feature for FantasyLandWalk
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make FantasyLandWalk better? We'd love to hear it!
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like.
+      placeholder: Describe the feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case / Motivation
+      description: Why would this feature be useful? What problem does it solve?
+      placeholder: Explain why this feature matters...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: If you have ideas on how this could be implemented, share them here.
+      placeholder: Describe your proposed approach...
+
+  - type: dropdown
+    id: related-map
+    attributes:
+      label: Which map/journey does this relate to?
+      options:
+        - All
+        - The Realm Walk
+        - The Battle Station
+        - New Map
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Nice to have
+        - Important
+        - Critical
+    validations:
+      required: true

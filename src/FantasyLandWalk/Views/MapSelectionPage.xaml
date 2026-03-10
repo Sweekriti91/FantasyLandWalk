@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:FantasyLandWalk.ViewModels"
+             xmlns:models="clr-namespace:FantasyLandWalk.Models"
+             x:Class="FantasyLandWalk.Views.MapSelectionPage"
+             x:DataType="vm:MapSelectionViewModel"
+             Title="FantasyLandWalk"
+             BackgroundColor="#1a1a2e">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="4" Padding="0,24,0,8">
+                <Label Text="🗺️ FantasyLandWalk"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       TextColor="#d4a647"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Choose Your Quest"
+                       FontSize="18"
+                       TextColor="#e8d5b7"
+                       HorizontalTextAlignment="Center"
+                       Opacity="0.8" />
+            </VerticalStackLayout>
+
+            <!-- Map Cards -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Maps}"
+                                 Spacing="12">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:JourneyMap">
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#16213e"
+                                Stroke="#2d6a4f"
+                                StrokeThickness="1"
+                                Padding="16">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border"
+                                             Binding="{Binding IsComingSoon}"
+                                             Value="True">
+                                    <Setter Property="Opacity" Value="0.55" />
+                                    <Setter Property="Stroke" Value="#444444" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
+                                <!-- Map Name -->
+                                <Label Text="{Binding Name}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="#d4a647" />
+
+                                <!-- Description -->
+                                <Label Grid.Row="1"
+                                       Text="{Binding Description}"
+                                       FontSize="14"
+                                       TextColor="#e8d5b7"
+                                       LineBreakMode="WordWrap" />
+
+                                <!-- Distance Info -->
+                                <Label Grid.Row="2"
+                                       Text="{Binding DistanceInfo}"
+                                       FontSize="12"
+                                       TextColor="#8b7355" />
+
+                                <!-- Action: Start Journey or Coming Soon -->
+                                <Grid Grid.Row="3">
+                                    <Button Text="Start Journey →"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MapSelectionViewModel}}, Path=SelectMapCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#2d6a4f"
+                                            TextColor="#e8d5b7"
+                                            FontAttributes="Bold"
+                                            CornerRadius="8"
+                                            HeightRequest="44"
+                                            IsVisible="{Binding IsAvailable}" />
+
+                                    <Border StrokeShape="RoundRectangle 8"
+                                            BackgroundColor="#2a2a3e"
+                                            Stroke="#444444"
+                                            Padding="12"
+                                            IsVisible="{Binding IsComingSoon}"
+                                            HorizontalOptions="Fill">
+                                        <Label Text="🔒 Coming Soon"
+                                               HorizontalTextAlignment="Center"
+                                               TextColor="#8b7355"
+                                               FontAttributes="Italic" />
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <!-- Future Features -->
+            <VerticalStackLayout Spacing="8" Padding="0,16,0,0">
+                <Label Text="Future Features"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#8b7355"
+                       Margin="0,0,0,4" />
+
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="Auto,Auto"
+                      ColumnSpacing="10"
+                      RowSpacing="10">
+
+                    <!-- Soundscape -->
+                    <Border StrokeShape="RoundRectangle 8"
+                            BackgroundColor="#16213e"
+                            Stroke="#333333"
+                            Padding="12"
+                            Opacity="0.5">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenSoundscapeCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="🎧 Soundscape"
+                                   TextColor="#e8d5b7"
+                                   FontSize="14" />
+                            <Label Text="Coming soon"
+                                   TextColor="#666666"
+                                   FontSize="11"
+                                   FontAttributes="Italic" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- AI Narrator -->
+                    <Border Grid.Column="1"
+                            StrokeShape="RoundRectangle 8"
+                            BackgroundColor="#16213e"
+                            Stroke="#333333"
+                            Padding="12"
+                            Opacity="0.5">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenAINarratorCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="🤖 AI Narrator"
+                                   TextColor="#e8d5b7"
+                                   FontSize="14" />
+                            <Label Text="Coming soon"
+                                   TextColor="#666666"
+                                   FontSize="11"
+                                   FontAttributes="Italic" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Settings -->
+                    <Border Grid.Row="1"
+                            StrokeShape="RoundRectangle 8"
+                            BackgroundColor="#16213e"
+                            Stroke="#333333"
+                            Padding="12"
+                            Opacity="0.5">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenSettingsCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="⚙️ Settings"
+                                   TextColor="#e8d5b7"
+                                   FontSize="14" />
+                            <Label Text="Coming soon"
+                                   TextColor="#666666"
+                                   FontSize="11"
+                                   FontAttributes="Italic" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Stats -->
+                    <Border Grid.Row="1"
+                            Grid.Column="1"
+                            StrokeShape="RoundRectangle 8"
+                            BackgroundColor="#16213e"
+                            Stroke="#333333"
+                            Padding="12"
+                            Opacity="0.5">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenStatsCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="📊 Stats"
+                                   TextColor="#e8d5b7"
+                                   FontSize="14" />
+                            <Label Text="Coming soon"
+                                   TextColor="#666666"
+                                   FontSize="11"
+                                   FontAttributes="Italic" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+            </VerticalStackLayout>
+
+            <!-- Footer -->
+            <Label Text="Built with 🤖 GitHub Copilot"
+                   FontSize="11"
+                   TextColor="#555555"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,20,0,10" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

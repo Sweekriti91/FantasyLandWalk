@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FantasyLandWalk/FantasyLandWalk.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FantasyLandWalk.Tests/FantasyLandWalk.Tests.csproj" />
+  </Folder>
+</Solution>
