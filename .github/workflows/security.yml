@@ -1,0 +1,57 @@
+name: Security Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore test project
+        run: dotnet restore tests/FantasyLandWalk.Tests/FantasyLandWalk.Tests.csproj
+
+      - name: Vulnerability report
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          dotnet list tests/FantasyLandWalk.Tests/FantasyLandWalk.Tests.csproj package --vulnerable --include-transitive > out/dependency-vulnerabilities.txt
+
+      - name: Upload vulnerability artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-vulnerabilities
+          path: out/dependency-vulnerabilities.txt
+          retention-days: 14
+
+  repository-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Block committed signing secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden=$(find . -type f \( -name '*.p12' -o -name '*.mobileprovision' -o -name '*.keystore' -o -name '*.jks' \) | grep -v '^./.git/' || true)
+          if [ -n "$forbidden" ]; then
+            echo "Forbidden signing artifacts found in repository:"
+            echo "$forbidden"
+            exit 1
+          fi

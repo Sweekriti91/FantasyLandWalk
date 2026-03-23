@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:FantasyLandWalk.ViewModels"
+             x:Class="FantasyLandWalk.Views.JourneyStatsPage"
+             x:DataType="vm:JourneyStatsViewModel"
+             Title="{Binding MapName}"
+             BackgroundColor="#1a1a2e">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="4" Padding="0,16,0,0">
+                <Label Text="📈 Journey Stats"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="#d4a647"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="{Binding MapName}"
+                       FontSize="14"
+                       TextColor="#8b7355"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Progress Overview -->
+            <Border StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#16213e"
+                    Stroke="#2d6a4f"
+                    StrokeThickness="1"
+                    Padding="16">
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="Overall Progress"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#d4a647" />
+
+                    <ProgressBar Progress="{Binding ProgressFraction}"
+                                 ProgressColor="#2d6a4f" />
+
+                    <Label Text="{Binding ProgressPercentage, StringFormat='{0:F0}% complete'}"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="#d4a647"
+                           HorizontalTextAlignment="Center" />
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding DistanceWalked}"
+                                   FontSize="15"
+                                   FontAttributes="Bold"
+                                   TextColor="#e8d5b7"
+                                   HorizontalTextAlignment="Center" />
+                            <Label Text="walked"
+                                   FontSize="11"
+                                   TextColor="#8b7355"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="{Binding TotalDistance}"
+                                   FontSize="15"
+                                   FontAttributes="Bold"
+                                   TextColor="#e8d5b7"
+                                   HorizontalTextAlignment="Center" />
+                            <Label Text="total"
+                                   FontSize="11"
+                                   TextColor="#8b7355"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                            <Label Text="{Binding DistanceRemaining}"
+                                   FontSize="15"
+                                   FontAttributes="Bold"
+                                   TextColor="#e8d5b7"
+                                   HorizontalTextAlignment="Center" />
+                            <Label Text="remaining"
+                                   FontSize="11"
+                                   TextColor="#8b7355"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Waypoints Card -->
+            <Border StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#16213e"
+                    Stroke="#2d6a4f"
+                    StrokeThickness="1"
+                    Padding="16">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+
+                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Label Text="Waypoints"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#d4a647" />
+
+                        <HorizontalStackLayout Spacing="4">
+                            <Label Text="📍 At:"
+                                   FontSize="13"
+                                   TextColor="#8b7355"
+                                   VerticalTextAlignment="Center" />
+                            <Label Text="{Binding CurrentWaypointName}"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#e8d5b7"
+                                   VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="4">
+                            <Label Text="🎯 Next:"
+                                   FontSize="13"
+                                   TextColor="#8b7355"
+                                   VerticalTextAlignment="Center" />
+                            <Label Text="{Binding NextWaypointName}"
+                                   FontSize="13"
+                                   TextColor="#e8d5b7"
+                                   VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1"
+                                         VerticalOptions="Center"
+                                         HorizontalOptions="End"
+                                         Spacing="2">
+                        <Label Text="{Binding WaypointsReached}"
+                               FontSize="40"
+                               FontAttributes="Bold"
+                               TextColor="#d4a647"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="{Binding TotalWaypoints, StringFormat='of {0}'}"
+                               FontSize="13"
+                               TextColor="#8b7355"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="waypoints"
+                               FontSize="11"
+                               TextColor="#8b7355"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+
+                </Grid>
+            </Border>
+
+            <!-- Journey Timeline Card -->
+            <Border StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#16213e"
+                    Stroke="#2d6a4f"
+                    StrokeThickness="1"
+                    Padding="16">
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="Journey Log"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#d4a647" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                        <Border StrokeShape="RoundRectangle 8"
+                                BackgroundColor="#0d3b2e"
+                                Stroke="#2d6a4f"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="{Binding TotalSteps, StringFormat='{0:N0}'}"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="#e8d5b7"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="🚶 steps"
+                                       FontSize="12"
+                                       TextColor="#8b7355"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                StrokeShape="RoundRectangle 8"
+                                BackgroundColor="#0d3b2e"
+                                Stroke="#2d6a4f"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="{Binding DaysOnJourney}"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="#e8d5b7"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="⏱️ on this quest"
+                                       FontSize="12"
+                                       TextColor="#8b7355"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </Grid>
+
+                    <Label Text="{Binding JourneyStarted, StringFormat='Quest began: {0}'}"
+                           FontSize="12"
+                           TextColor="#8b7355"
+                           HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

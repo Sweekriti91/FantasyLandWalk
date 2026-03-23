@@ -76,7 +76,7 @@ public partial class MapSelectionViewModel : ObservableObject
     private async Task OpenSettings()
     {
 #if !NET10_0
-        await Shell.Current.DisplayAlertAsync("Coming soon!", "Settings are not yet available.", "OK");
+        await Shell.Current.GoToAsync("SettingsPage");
 #else
         await Task.CompletedTask;
 #endif

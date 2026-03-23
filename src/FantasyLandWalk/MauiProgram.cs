@@ -19,15 +19,22 @@ public static class MauiProgram
 			});
 
 		// Services
+		var dbPath = System.IO.Path.Combine(FileSystem.AppDataDirectory, "fantasy_journey.db3");
+		builder.Services.AddSingleton<IStorageService>(new StorageService(dbPath));
 		builder.Services.AddSingleton<IJourneyService, JourneyService>();
+		builder.Services.AddSingleton<ISettingsService, SettingsService>();
 
 		// ViewModels
 		builder.Services.AddTransient<MapSelectionViewModel>();
 		builder.Services.AddTransient<JourneyMapViewModel>();
+		builder.Services.AddTransient<JourneyStatsViewModel>();
+		builder.Services.AddTransient<SettingsViewModel>();
 
 		// Pages
 		builder.Services.AddTransient<MapSelectionPage>();
 		builder.Services.AddTransient<JourneyMapPage>();
+		builder.Services.AddTransient<JourneyStatsPage>();
+		builder.Services.AddTransient<SettingsPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

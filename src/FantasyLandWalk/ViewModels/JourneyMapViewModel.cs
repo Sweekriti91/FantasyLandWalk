@@ -124,7 +124,8 @@ public partial class JourneyMapViewModel : ObservableObject
     private async Task OpenJourneyStats()
     {
 #if !NET10_0
-        await Shell.Current.DisplayAlertAsync("Coming soon!", "Journey Stats are not yet available.", "OK");
+        if (CurrentMap is not null)
+            await Shell.Current.GoToAsync($"JourneyStatsPage?mapId={CurrentMap.Id}");
 #else
         await Task.CompletedTask;
 #endif

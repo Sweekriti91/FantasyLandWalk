@@ -96,7 +96,7 @@
 
             <!-- Future Features -->
             <VerticalStackLayout Spacing="8" Padding="0,16,0,0">
-                <Label Text="Future Features"
+                <Label Text="Features"
                        FontSize="16"
                        FontAttributes="Bold"
                        TextColor="#8b7355"
@@ -152,9 +152,8 @@
                     <Border Grid.Row="1"
                             StrokeShape="RoundRectangle 8"
                             BackgroundColor="#16213e"
-                            Stroke="#333333"
-                            Padding="12"
-                            Opacity="0.5">
+                            Stroke="#2d6a4f"
+                            Padding="12">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding OpenSettingsCommand}" />
                         </Border.GestureRecognizers>
@@ -162,10 +161,9 @@
                             <Label Text="⚙️ Settings"
                                    TextColor="#e8d5b7"
                                    FontSize="14" />
-                            <Label Text="Coming soon"
-                                   TextColor="#666666"
-                                   FontSize="11"
-                                   FontAttributes="Italic" />
+                            <Label Text="Customize your adventure"
+                                   TextColor="#2d6a4f"
+                                   FontSize="11" />
                         </VerticalStackLayout>
                     </Border>
 

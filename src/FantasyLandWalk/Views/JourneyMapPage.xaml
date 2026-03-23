@@ -181,9 +181,8 @@
                         Grid.Column="1"
                         StrokeShape="RoundRectangle 8"
                         BackgroundColor="#16213e"
-                        Stroke="#333333"
-                        Padding="10"
-                        Opacity="0.5">
+                        Stroke="#2d6a4f"
+                        Padding="10">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding OpenJourneyStatsCommand}" />
                     </Border.GestureRecognizers>
@@ -191,10 +190,9 @@
                         <Label Text="📈 Journey Stats"
                                TextColor="#e8d5b7"
                                FontSize="13" />
-                        <Label Text="Coming soon"
-                               TextColor="#555555"
-                               FontSize="10"
-                               FontAttributes="Italic" />
+                        <Label Text="View your progress"
+                               TextColor="#2d6a4f"
+                               FontSize="10" />
                     </VerticalStackLayout>
                 </Border>
             </Grid>

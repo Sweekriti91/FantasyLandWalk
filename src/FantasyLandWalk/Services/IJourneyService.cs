@@ -11,4 +11,9 @@ public interface IJourneyService
     Waypoint? GetNextWaypoint(string mapId);
     double GetDistanceToNextWaypoint(string mapId);
     double GetProgressPercentage(string mapId);
+
+    // Persistence
+    Task InitializeAsync();
+    Task UpdateProgressAsync(string mapId, double distanceWalkedKm, int totalSteps);
+    Task ResetProgressAsync(string mapId);
 }

@@ -5,7 +5,7 @@ namespace FantasyLandWalk.Tests;
 
 public class JourneyServiceTests
 {
-    private readonly JourneyService _service = new();
+    private readonly JourneyService _service = new(new NoOpStorageService());
 
     [Fact]
     public void GetAvailableMaps_ReturnsAtLeastOneMap()

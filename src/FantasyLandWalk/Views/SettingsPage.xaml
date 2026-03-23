@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:FantasyLandWalk.ViewModels"
+             x:Class="FantasyLandWalk.Views.SettingsPage"
+             x:DataType="vm:SettingsViewModel"
+             Title="Settings"
+             BackgroundColor="#1a1a2e">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="4" Padding="0,16,0,8">
+                <Label Text="⚙️ Settings"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#d4a647"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Distance Units Card -->
+            <Border StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#16213e"
+                    Stroke="#2d6a4f"
+                    StrokeThickness="1"
+                    Padding="16">
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="📏 Distance Units"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#d4a647" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                            <Label Text="{Binding UnitsLabel}"
+                                   FontSize="15"
+                                   TextColor="#e8d5b7" />
+                            <Label Text="Toggle between kilometers and miles"
+                                   FontSize="12"
+                                   TextColor="#8b7355" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding UseMetricUnits}"
+                                OnColor="#2d6a4f"
+                                VerticalOptions="Center" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Danger Zone -->
+            <Border StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#16213e"
+                    Stroke="#8b1a1a"
+                    StrokeThickness="1"
+                    Padding="16">
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="⚠️ Danger Zone"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#c0392b" />
+
+                    <Label Text="Reset all journey progress. This cannot be undone."
+                           FontSize="13"
+                           TextColor="#8b7355" />
+
+                    <Button Text="Reset All Progress"
+                            Command="{Binding ResetAllProgressCommand}"
+                            BackgroundColor="#2a0e0e"
+                            TextColor="#c0392b"
+                            BorderColor="#8b1a1a"
+                            BorderWidth="1"
+                            CornerRadius="8"
+                            HeightRequest="44"
+                            FontAttributes="Bold" />
+
+                    <Label Text="{Binding StatusMessage}"
+                           FontSize="12"
+                           TextColor="#2d6a4f"
+                           HorizontalTextAlignment="Center"
+                           IsVisible="{Binding HasStatusMessage}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- App Info Card -->
+            <Border StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#16213e"
+                    Stroke="#333333"
+                    StrokeThickness="1"
+                    Padding="16">
+                <VerticalStackLayout Spacing="8">
+
+                    <Label Text="🗺️ FantasyLandWalk"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#d4a647"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="{Binding AppVersion}"
+                           FontSize="13"
+                           TextColor="#8b7355"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="Built with 🤖 GitHub Copilot"
+                           FontSize="11"
+                           TextColor="#555555"
+                           HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

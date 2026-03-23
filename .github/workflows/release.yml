@@ -1,0 +1,186 @@
+name: Release Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_android:
+        description: Build Android APK artifact
+        required: true
+        default: true
+        type: boolean
+      build_ios:
+        description: Build iOS IPA artifact (requires Apple signing secrets)
+        required: true
+        default: false
+        type: boolean
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    name: Build Metadata
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate release metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          cat <<EOF > out/release-metadata.json
+          {
+            "repository": "${{ github.repository }}",
+            "ref": "${{ github.ref }}",
+            "sha": "${{ github.sha }}",
+            "run_id": "${{ github.run_id }}",
+            "run_number": "${{ github.run_number }}",
+            "generated_at_utc": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          }
+          EOF
+
+      - name: Upload metadata artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-metadata
+          path: out/release-metadata.json
+          retention-days: 30
+
+  android:
+    name: Android Release APK
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || inputs.build_android
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install MAUI workload
+        run: dotnet workload install maui
+
+      - name: Restore
+        run: dotnet restore src/FantasyLandWalk/FantasyLandWalk.csproj
+
+      - name: Prepare Android signing material
+        id: android_signing
+        shell: bash
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+        run: |
+          set -euo pipefail
+          if [ -n "${ANDROID_KEYSTORE:-}" ]; then
+            echo "$ANDROID_KEYSTORE" | base64 --decode > "$RUNNER_TEMP/release.keystore"
+            echo "has_signing=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_signing=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish signed APK
+        if: steps.android_signing.outputs.has_signing == 'true'
+        run: |
+          dotnet publish src/FantasyLandWalk/FantasyLandWalk.csproj \
+            -f net10.0-android \
+            -c Release \
+            /p:AndroidSigningKeyStore=$RUNNER_TEMP/release.keystore \
+            /p:AndroidSigningStorePass=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
+            /p:AndroidSigningKeyAlias=${{ secrets.ANDROID_KEY_ALIAS }} \
+            /p:AndroidSigningKeyPass=${{ secrets.ANDROID_KEY_PASSWORD }}
+
+      - name: Publish unsigned APK fallback
+        if: steps.android_signing.outputs.has_signing != 'true'
+        run: dotnet publish src/FantasyLandWalk/FantasyLandWalk.csproj -f net10.0-android -c Release
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release
+          path: |
+            src/FantasyLandWalk/bin/Release/net10.0-android/**/*.apk
+            src/FantasyLandWalk/bin/Release/net10.0-android/**/*.aab
+          retention-days: 14
+
+      - name: Cleanup keystore
+        if: always()
+        shell: bash
+        run: rm -f "$RUNNER_TEMP/release.keystore"
+
+  ios:
+    name: iOS Release IPA
+    runs-on: macos-latest
+    if: github.event_name == 'push' || inputs.build_ios
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install MAUI workload
+        run: dotnet workload install maui
+
+      - name: Restore
+        run: dotnet restore src/FantasyLandWalk/FantasyLandWalk.csproj
+
+      - name: Validate iOS signing prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${{ secrets.APPLE_CERTIFICATE_P12 }}" ] || [ -z "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" ] || [ -z "${{ secrets.APPLE_PROVISIONING_PROFILE }}" ]; then
+            echo "Missing iOS signing secrets. Skipping iOS artifact build."
+            exit 0
+          fi
+
+      - name: Import certificate and provisioning profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          CERT_PATH="$RUNNER_TEMP/cert.p12"
+          PROFILE_PATH="$RUNNER_TEMP/profile.mobileprovision"
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+
+          echo "${{ secrets.APPLE_CERTIFICATE_P12 }}" | base64 --decode > "$CERT_PATH"
+          echo "${{ secrets.APPLE_PROVISIONING_PROFILE }}" | base64 --decode > "$PROFILE_PATH"
+
+          security create-keychain -p "" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" -A -f pkcs12 -k "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH"
+
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/"
+
+      - name: Publish IPA
+        shell: bash
+        run: |
+          dotnet publish src/FantasyLandWalk/FantasyLandWalk.csproj \
+            -f net10.0-ios \
+            -c Release \
+            /p:RuntimeIdentifier=ios-arm64 \
+            /p:ArchiveOnBuild=true
+
+      - name: Upload iOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release
+          path: src/FantasyLandWalk/bin/Release/net10.0-ios/**/*.ipa
+          retention-days: 14
+
+      - name: Cleanup iOS signing files
+        if: always()
+        shell: bash
+        run: |
+          rm -f "$RUNNER_TEMP/cert.p12"
+          rm -f "$RUNNER_TEMP/profile.mobileprovision"
+          rm -f "$RUNNER_TEMP/build.keychain-db"

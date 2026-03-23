@@ -6,10 +6,51 @@ public class JourneyService : IJourneyService
 {
     private readonly List<JourneyMap> _maps;
     private readonly Dictionary<string, JourneyProgress> _progressByMap = [];
+    private readonly IStorageService _storage;
 
-    public JourneyService()
+    public JourneyService(IStorageService storage)
     {
+        _storage = storage;
         _maps = BuildMaps();
+    }
+
+    public async Task InitializeAsync()
+    {
+        await _storage.InitializeAsync();
+        var saved = await _storage.LoadAllProgressAsync();
+        foreach (var progress in saved)
+            _progressByMap[progress.MapId] = progress;
+    }
+
+    public async Task UpdateProgressAsync(string mapId, double distanceWalkedKm, int totalSteps)
+    {
+        var progress = GetProgress(mapId);
+        if (progress.StartedAt == default)
+            progress.StartedAt = DateTime.UtcNow;
+        progress.DistanceWalkedKm = distanceWalkedKm;
+        progress.TotalSteps = totalSteps;
+        progress.LastUpdated = DateTime.UtcNow;
+
+        var map = GetMap(mapId);
+        if (map is not null)
+        {
+            for (int i = map.Waypoints.Count - 1; i >= 0; i--)
+            {
+                if (distanceWalkedKm >= map.Waypoints[i].CumulativeDistanceKm)
+                {
+                    progress.CurrentWaypointIndex = i;
+                    break;
+                }
+            }
+        }
+
+        await _storage.SaveProgressAsync(progress);
+    }
+
+    public async Task ResetProgressAsync(string mapId)
+    {
+        _progressByMap.Remove(mapId);
+        await _storage.DeleteProgressAsync(mapId);
     }
 
     public List<JourneyMap> GetAvailableMaps() => _maps;
@@ -26,9 +67,7 @@ public class JourneyService : IJourneyService
                 MapId = mapId,
                 DistanceWalkedKm = 0,
                 TotalSteps = 0,
-                CurrentWaypointIndex = 0,
-                StartedAt = DateTime.UtcNow,
-                LastUpdated = DateTime.UtcNow
+                CurrentWaypointIndex = 0
             };
             _progressByMap[mapId] = progress;
         }
