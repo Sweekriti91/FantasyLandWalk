@@ -33,7 +33,7 @@ jobs:
           dotnet list tests/FantasyLandWalk.Tests/FantasyLandWalk.Tests.csproj package --vulnerable --include-transitive > out/dependency-vulnerabilities.txt
 
       - name: Upload vulnerability artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dependency-vulnerabilities
           path: out/dependency-vulnerabilities.txt
