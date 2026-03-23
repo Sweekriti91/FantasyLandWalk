@@ -45,7 +45,7 @@ jobs:
           EOF
 
       - name: Upload metadata artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-metadata
           path: out/release-metadata.json
@@ -100,7 +100,7 @@ jobs:
         run: dotnet publish src/FantasyLandWalk/FantasyLandWalk.csproj -f net10.0-android -c Release
 
       - name: Upload Android artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: android-release
           path: |
@@ -171,7 +171,7 @@ jobs:
             /p:ArchiveOnBuild=true
 
       - name: Upload iOS artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ios-release
           path: src/FantasyLandWalk/bin/Release/net10.0-ios/**/*.ipa
